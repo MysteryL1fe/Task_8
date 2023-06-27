@@ -9,8 +9,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class RoadsPanel extends JPanel {
-    private ArrayList<Road> roads;
-    private MainFrame mainFrame;
+    private final ArrayList<Road> roads;
+    private final MainFrame mainFrame;
 
     public RoadsPanel(ArrayList<Road> roads, MainFrame mainFrame) {
         this.roads = roads;
@@ -29,26 +29,23 @@ public class RoadsPanel extends JPanel {
         this.add(addRoadBtn);
 
         for (Road road : roads) {
-            this.add(new RoadPanel(road));
+            this.add(new RoadBtn(road));
         }
 
         this.revalidate();
         this.repaint();
     }
 
-    private class RoadPanel extends JPanel {
-        private Road road;
+    private class RoadBtn extends JButton {
+        private final Road road;
 
-        public RoadPanel(Road road) {
+        public RoadBtn(Road road) {
             this.road = road;
 
-            this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-            JButton roadBtn = new JButton(String.format(
+            this.setText(String.format(
                     "%s - %s", road.getFirstStop().getName(), road.getSecondStop().getName()
             ));
-            roadBtn.addActionListener(new RoadBtnActionListener());
-            this.add(roadBtn);
+            this.addActionListener(new RoadBtnActionListener());
         }
 
         private class RoadBtnActionListener implements ActionListener {
@@ -107,7 +104,7 @@ public class RoadsPanel extends JPanel {
         }
 
         private class ChooseStopBtnActionListener implements ActionListener {
-            private boolean isFirstStop;
+            private final boolean isFirstStop;
 
             public ChooseStopBtnActionListener(boolean isFirstStop) {
                 this.isFirstStop = isFirstStop;
@@ -136,7 +133,7 @@ public class RoadsPanel extends JPanel {
         }
 
         private class ChooseStopPanel extends JPanel {
-            private boolean isFirstStop;
+            private final boolean isFirstStop;
 
             public ChooseStopPanel(boolean isFirstStop) {
                 this.isFirstStop = isFirstStop;
@@ -144,21 +141,18 @@ public class RoadsPanel extends JPanel {
                 this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
                 for (Stop stop : mainFrame.getStopsList()) {
-                    this.add(new StopPanel(stop));
+                    this.add(new StopBtn(stop));
                 }
             }
 
-            private class StopPanel extends JPanel {
-                private Stop stop;
+            private class StopBtn extends JButton {
+                private final Stop stop;
 
-                public StopPanel(Stop stop) {
+                public StopBtn(Stop stop) {
                     this.stop = stop;
 
-                    this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-                    JButton stopBtn = new JButton(stop.getName());
-                    stopBtn.addActionListener(new StopBtnActionListener());
-                    this.add(stopBtn);
+                    this.setText(stop.getName());
+                    this.addActionListener(new StopBtnActionListener());
                 }
 
                 private class StopBtnActionListener implements ActionListener {

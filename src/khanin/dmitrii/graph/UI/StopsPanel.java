@@ -8,8 +8,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class StopsPanel extends JPanel {
-    private ArrayList<Stop> stops;
-    private MainFrame mainFrame;
+    private final ArrayList<Stop> stops;
+    private final MainFrame mainFrame;
 
     public StopsPanel(ArrayList<Stop> stops, MainFrame mainFrame) {
         this.stops = stops;
@@ -28,24 +28,21 @@ public class StopsPanel extends JPanel {
         this.add(addStopBtn);
 
         for (Stop stop : stops) {
-            this.add(new StopPanel(stop));
+            this.add(new StopBtn(stop));
         }
 
         this.revalidate();
         this.repaint();
     }
 
-    private class StopPanel extends JPanel {
-        private Stop stop;
+    private class StopBtn extends JButton {
+        private final Stop stop;
 
-        public StopPanel(Stop stop) {
+        public StopBtn(Stop stop) {
             this.stop = stop;
 
-            this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-            JButton stopBtn = new JButton(stop.getName());
-            stopBtn.addActionListener(new StopBtnActionListener());
-            this.add(stopBtn);
+            this.setText(stop.getName());
+            this.addActionListener(new StopBtnActionListener());
         }
 
         private class StopBtnActionListener implements ActionListener {
@@ -58,7 +55,7 @@ public class StopsPanel extends JPanel {
 
     private class ChangeStopPanel extends JPanel {
         private Stop stop;
-        private JTextField stopName;
+        private final JTextField stopName;
 
         public ChangeStopPanel(Stop stop) {
             this.stop = stop;

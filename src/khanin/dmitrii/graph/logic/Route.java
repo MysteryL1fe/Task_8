@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class Route {
     private ArrayList<Road> roadsList;
-    private ArrayList<Integer> stopTimesList;
+    private ArrayList<Integer> delayTimesList;
     private String num;
 
     public Route(ArrayList<Road> roadsList, ArrayList<Integer> stopTimesList, String num) {
         this.roadsList = roadsList;
-        this.stopTimesList = stopTimesList;
+        this.delayTimesList = stopTimesList;
         this.num = num;
     }
 
@@ -21,12 +21,12 @@ public class Route {
         this.roadsList = roadsList;
     }
 
-    public ArrayList<Integer> getStopTimesList() {
-        return (ArrayList<Integer>) stopTimesList.clone();
+    public ArrayList<Integer> getDelayTimesList() {
+        return (ArrayList<Integer>) delayTimesList.clone();
     }
 
-    public void setStopTimesList(ArrayList<Integer> stopTimesList) {
-        this.stopTimesList = stopTimesList;
+    public void setDelayTimesList(ArrayList<Integer> delayTimesList) {
+        this.delayTimesList = delayTimesList;
     }
 
     public String getNum() {

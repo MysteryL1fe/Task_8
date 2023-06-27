@@ -21,6 +21,7 @@ public class MainFrame extends JFrame {
     private JPanel thirdChangesPanel;
     private JPanel fourthChangesPanel;
     private JButton createGraphBtn;
+    private JPanel fifthChangesPanel;
     private ArrayList<Stop> stopsList = new ArrayList<>();
     private ArrayList<Road> roadsList = new ArrayList<>();
     private ArrayList<Route> routesList = new ArrayList<>();
@@ -35,6 +36,9 @@ public class MainFrame extends JFrame {
         firstChangesPanel.setLayout(new BoxLayout(firstChangesPanel, BoxLayout.Y_AXIS));
         secondChangesPanel.setLayout(new BoxLayout(secondChangesPanel, BoxLayout.Y_AXIS));
         thirdChangesPanel.setLayout(new BoxLayout(thirdChangesPanel, BoxLayout.Y_AXIS));
+        fourthChangesPanel.setLayout(new BoxLayout(fourthChangesPanel, BoxLayout.Y_AXIS));
+        fifthChangesPanel.setLayout(new BoxLayout(fifthChangesPanel, BoxLayout.Y_AXIS));
+
 
         stopsBtn.addActionListener(new StopsBtnActionListener());
         roadsBtn.addActionListener(new RoadsBtnActionListener());
@@ -44,6 +48,9 @@ public class MainFrame extends JFrame {
 
     public void changeSecondPanel(JPanel panel) {
         secondChangesPanel.removeAll();
+        thirdChangesPanel.removeAll();
+        fourthChangesPanel.removeAll();
+        fifthChangesPanel.removeAll();
         if (panel != null) secondChangesPanel.add(panel);
         revalidate();
         repaint();
@@ -51,6 +58,8 @@ public class MainFrame extends JFrame {
 
     public void changeThirdPanel(JPanel panel) {
         thirdChangesPanel.removeAll();
+        fourthChangesPanel.removeAll();
+        fifthChangesPanel.removeAll();
         if (panel != null) thirdChangesPanel.add(panel);
         revalidate();
         repaint();
@@ -58,7 +67,15 @@ public class MainFrame extends JFrame {
 
     public void changeFourthPanel(JPanel panel) {
         fourthChangesPanel.removeAll();
+        fifthChangesPanel.removeAll();
         if (panel != null) fourthChangesPanel.add(panel);
+        revalidate();
+        repaint();
+    }
+
+    public void changeFifthPanel(JPanel panel) {
+        fifthChangesPanel.removeAll();
+        if (panel != null) fifthChangesPanel.add(panel);
         revalidate();
         repaint();
     }
@@ -87,6 +104,7 @@ public class MainFrame extends JFrame {
             secondChangesPanel.removeAll();
             thirdChangesPanel.removeAll();
             fourthChangesPanel.removeAll();
+            fifthChangesPanel.removeAll();
             MainFrame.this.revalidate();
             MainFrame.this.repaint();
         }
@@ -100,6 +118,7 @@ public class MainFrame extends JFrame {
             secondChangesPanel.removeAll();
             thirdChangesPanel.removeAll();
             fourthChangesPanel.removeAll();
+            fifthChangesPanel.removeAll();
             MainFrame.this.revalidate();
             MainFrame.this.repaint();
         }
@@ -113,6 +132,7 @@ public class MainFrame extends JFrame {
             secondChangesPanel.removeAll();
             thirdChangesPanel.removeAll();
             fourthChangesPanel.removeAll();
+            fifthChangesPanel.removeAll();
             MainFrame.this.revalidate();
             MainFrame.this.repaint();
         }
@@ -126,6 +146,7 @@ public class MainFrame extends JFrame {
             secondChangesPanel.removeAll();
             thirdChangesPanel.removeAll();
             fourthChangesPanel.removeAll();
+            fifthChangesPanel.removeAll();
             MainFrame.this.revalidate();
             MainFrame.this.repaint();
         }
