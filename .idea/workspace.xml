@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="11c7e455-70c7-4eba-9534-4aa389b66144" name="Changes" comment="partly added UI for routes">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/apache_xmlgraphics_batik_bridge.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/guru_nidi_graphviz_java.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/MultipleUseOfOneStopException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/RoadWithoutStopException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/RouteWithoutStopException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/AdjMatrixGraph.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/Graph.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/GraphUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/WeightedGraph.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/logic/CityGraph.java" afterDir="false" />
+    <list default="true" id="11c7e455-70c7-4eba-9534-4aa389b66144" name="Changes" comment="UI completed">
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/road/RoadConnectSameStopsException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/road/WrongRoadLengthException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/route/DifferentRouteStopsAndDelayTimesCountsException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/route/EmptyRouteDelayTimesException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/route/EmptyRouteNumException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/route/RouteWithRoadBreakException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/stop/EmptyStopNameException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/transport/EmptyTransportNumException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/transport/EmptyTransportRouteException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/transport/NegativeTransportCostException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/transport/NegativeTransportSpeedException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/transport/NegativeTransportStartTimeException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Task_8.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Task_8.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/MainFrame.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/MainFrame.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/MainFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/RoadsPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/RoadsPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/RoutesPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/RoutesPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/TransportsPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/TransportsPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/logic/Transport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/logic/Transport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/MultipleUseOfOneStopException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/stop/MultipleUseOfOneStopException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/RoadWithWrongLengthException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/RoadWithoutStopException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/road/RoadWithoutStopException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/RouteWithoutStopException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/route/RouteWithoutStopException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/GraphUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/GraphUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/WeightedGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/WeightedGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/logic/CityGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/logic/CityGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/logic/Solution.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +89,14 @@
       <option name="project" value="LOCAL" />
       <updated>1687884498267</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="UI completed">
+      <created>1687960909770</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1687960909770</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -101,6 +112,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="partly added UI for routes" />
-    <option name="LAST_COMMIT_MESSAGE" value="partly added UI for routes" />
+    <MESSAGE value="UI completed" />
+    <option name="LAST_COMMIT_MESSAGE" value="UI completed" />
   </component>
 </project>

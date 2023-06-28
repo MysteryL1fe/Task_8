@@ -1,4 +1,4 @@
-package khanin.dmitrii.graph.exceptions;
+package khanin.dmitrii.graph.exceptions.road;
 
 public class RoadWithoutStopException extends Exception {
     public RoadWithoutStopException(String message) {

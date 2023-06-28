@@ -35,11 +35,11 @@ public class MainFrame extends JFrame {
     private JPanel thirdChangesPanel;
     private JPanel fourthChangesPanel;
     private JButton createGraphBtn;
-    private ArrayList<Stop> stopsList = new ArrayList<>();
-    private ArrayList<Road> roadsList = new ArrayList<>();
-    private ArrayList<Route> routesList = new ArrayList<>();
-    private ArrayList<Transport> transportsList = new ArrayList<>();
-    private SvgPanel graphPanelPainter;
+    private final ArrayList<Stop> stopsList = new ArrayList<>();
+    private final ArrayList<Road> roadsList = new ArrayList<>();
+    private final ArrayList<Route> routesList = new ArrayList<>();
+    private final ArrayList<Transport> transportsList = new ArrayList<>();
+    private final SvgPanel graphPanelPainter;
 
     public MainFrame() {
         this.setTitle("Graph 2.0");

@@ -37,12 +37,12 @@ public class GraphUtils {
             int count = 0;
             for (Integer v2 : graph.adjacencies(v1)) {
                 sb.append(String.format(
-                        "  %s %s %s", graph.getStopNameByIndex(v1), "--", graph.getStopNameByIndex(v2)
+                        "  \"%s\" %s \"%s\"", graph.getStopNameByIndex(v1), "--", graph.getStopNameByIndex(v2)
                 )).append(nl);
                 count++;
             }
             if (count == 0) {
-                sb.append(graph.getStopNameByIndex(v1)).append(nl);
+                sb.append(String.format("\"%s\"", graph.getStopNameByIndex(v1))).append(nl);
             }
         }
         sb.append("}").append(nl);

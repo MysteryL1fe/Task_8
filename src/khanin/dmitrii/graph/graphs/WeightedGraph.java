@@ -41,9 +41,9 @@ public class WeightedGraph implements Graph {
             vCnt = maxV + 1;
         }
         if (weightMatrix[v1][v2] == 0) {
-            weightMatrix[v1][v2] = weight;
             eCnt++;
         }
+        weightMatrix[v1][v2] = weight;
     }
 
     @Override
