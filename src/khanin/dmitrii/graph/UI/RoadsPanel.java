@@ -92,7 +92,7 @@ public class RoadsPanel extends JPanel {
             this.add(new JLabel("Длина дороги"));
 
             lengthSpinner = new JSpinner();
-            lengthSpinner.setValue(road == null ? 0 : road.getLength());
+            lengthSpinner.setValue(road == null ? 1 : road.getLength());
             this.add(lengthSpinner);
 
             JButton okBtn = new JButton("Готово");
@@ -120,7 +120,7 @@ public class RoadsPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (road == null) {
-                    road = new Road(firstStop, secondStop, Math.max(0, (Integer) lengthSpinner.getValue()));
+                    road = new Road(firstStop, secondStop, Math.max(1, (Integer) lengthSpinner.getValue()));
                     roads.add(road);
                 } else {
                     road.setFirstStop(firstStop);
@@ -141,7 +141,9 @@ public class RoadsPanel extends JPanel {
                 this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
                 for (Stop stop : mainFrame.getStopsList()) {
-                    this.add(new StopBtn(stop));
+                    if (isFirstStop && stop != secondStop || !isFirstStop && stop != firstStop) {
+                        this.add(new StopBtn(stop));
+                    }
                 }
             }
 

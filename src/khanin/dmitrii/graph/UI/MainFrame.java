@@ -1,10 +1,24 @@
 package khanin.dmitrii.graph.UI;
 
+import guru.nidi.graphviz.engine.Format;
+import guru.nidi.graphviz.engine.Graphviz;
+import guru.nidi.graphviz.model.MutableGraph;
+import guru.nidi.graphviz.parse.Parser;
+import khanin.dmitrii.graph.graphs.GraphUtils;
 import khanin.dmitrii.graph.logic.*;
+import org.apache.batik.anim.dom.SAXSVGDocumentFactory;
+import org.apache.batik.bridge.*;
+import org.apache.batik.gvt.GraphicsNode;
+import org.apache.batik.util.XMLResourceDescriptor;
+import org.w3c.dom.svg.SVGDocument;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 
 public class MainFrame extends JFrame {
@@ -21,11 +35,11 @@ public class MainFrame extends JFrame {
     private JPanel thirdChangesPanel;
     private JPanel fourthChangesPanel;
     private JButton createGraphBtn;
-    private JPanel fifthChangesPanel;
     private ArrayList<Stop> stopsList = new ArrayList<>();
     private ArrayList<Road> roadsList = new ArrayList<>();
     private ArrayList<Route> routesList = new ArrayList<>();
     private ArrayList<Transport> transportsList = new ArrayList<>();
+    private SvgPanel graphPanelPainter;
 
     public MainFrame() {
         this.setTitle("Graph 2.0");
@@ -37,20 +51,22 @@ public class MainFrame extends JFrame {
         secondChangesPanel.setLayout(new BoxLayout(secondChangesPanel, BoxLayout.Y_AXIS));
         thirdChangesPanel.setLayout(new BoxLayout(thirdChangesPanel, BoxLayout.Y_AXIS));
         fourthChangesPanel.setLayout(new BoxLayout(fourthChangesPanel, BoxLayout.Y_AXIS));
-        fifthChangesPanel.setLayout(new BoxLayout(fifthChangesPanel, BoxLayout.Y_AXIS));
 
+        graphPanel.setLayout(new BorderLayout());
+        graphPanelPainter = new SvgPanel();
+        graphPanel.add(new JScrollPane(graphPanelPainter));
 
         stopsBtn.addActionListener(new StopsBtnActionListener());
         roadsBtn.addActionListener(new RoadsBtnActionListener());
         routesBtn.addActionListener(new RoutesBtnActionListener());
         transportsBtn.addActionListener(new TransportsBtnActionListener());
+        createGraphBtn.addActionListener(new CreateGraphBtnActionListener());
     }
 
     public void changeSecondPanel(JPanel panel) {
         secondChangesPanel.removeAll();
         thirdChangesPanel.removeAll();
         fourthChangesPanel.removeAll();
-        fifthChangesPanel.removeAll();
         if (panel != null) secondChangesPanel.add(panel);
         revalidate();
         repaint();
@@ -59,7 +75,6 @@ public class MainFrame extends JFrame {
     public void changeThirdPanel(JPanel panel) {
         thirdChangesPanel.removeAll();
         fourthChangesPanel.removeAll();
-        fifthChangesPanel.removeAll();
         if (panel != null) thirdChangesPanel.add(panel);
         revalidate();
         repaint();
@@ -67,17 +82,14 @@ public class MainFrame extends JFrame {
 
     public void changeFourthPanel(JPanel panel) {
         fourthChangesPanel.removeAll();
-        fifthChangesPanel.removeAll();
         if (panel != null) fourthChangesPanel.add(panel);
         revalidate();
         repaint();
     }
 
-    public void changeFifthPanel(JPanel panel) {
-        fifthChangesPanel.removeAll();
-        if (panel != null) fifthChangesPanel.add(panel);
-        revalidate();
-        repaint();
+    private static String dotToSvg(String dotSrc) throws IOException {
+        MutableGraph g = new Parser().read(dotSrc);
+        return Graphviz.fromGraph(g).render(Format.SVG).toString();
     }
 
     public ArrayList<Stop> getStopsList() {
@@ -96,6 +108,44 @@ public class MainFrame extends JFrame {
         return (ArrayList<Transport>) transportsList.clone();
     }
 
+    private static class SvgPanel extends JPanel {
+        private String svg = null;
+        private GraphicsNode svgGraphicsNode = null;
+
+        public void paint(String svg) throws IOException {
+            String xmlParser = XMLResourceDescriptor.getXMLParserClassName();
+            SAXSVGDocumentFactory df = new SAXSVGDocumentFactory(xmlParser);
+            SVGDocument doc = df.createSVGDocument(null, new StringReader(svg));
+            UserAgent userAgent = new UserAgentAdapter();
+            DocumentLoader loader = new DocumentLoader(userAgent);
+            BridgeContext ctx = new BridgeContext(userAgent, loader);
+            ctx.setDynamicState(BridgeContext.DYNAMIC);
+            GVTBuilder builder = new GVTBuilder();
+            svgGraphicsNode = builder.build(ctx, doc);
+
+            this.svg = svg;
+            repaint();
+        }
+
+        @Override
+        public void paintComponent(Graphics gr) {
+            super.paintComponent(gr);
+
+            if (svgGraphicsNode == null) {
+                return;
+            }
+
+            double scaleX = this.getWidth() / svgGraphicsNode.getPrimitiveBounds().getWidth();
+            double scaleY = this.getHeight() / svgGraphicsNode.getPrimitiveBounds().getHeight();
+            double scale = Math.min(scaleX, scaleY);
+            AffineTransform transform = new AffineTransform(scale, 0, 0, scale, 0, 0);
+            svgGraphicsNode.setTransform(transform);
+            Graphics2D g2d = (Graphics2D) gr;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            svgGraphicsNode.paint(g2d);
+        }
+    }
+
     private class StopsBtnActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -104,7 +154,6 @@ public class MainFrame extends JFrame {
             secondChangesPanel.removeAll();
             thirdChangesPanel.removeAll();
             fourthChangesPanel.removeAll();
-            fifthChangesPanel.removeAll();
             MainFrame.this.revalidate();
             MainFrame.this.repaint();
         }
@@ -118,7 +167,6 @@ public class MainFrame extends JFrame {
             secondChangesPanel.removeAll();
             thirdChangesPanel.removeAll();
             fourthChangesPanel.removeAll();
-            fifthChangesPanel.removeAll();
             MainFrame.this.revalidate();
             MainFrame.this.repaint();
         }
@@ -132,7 +180,6 @@ public class MainFrame extends JFrame {
             secondChangesPanel.removeAll();
             thirdChangesPanel.removeAll();
             fourthChangesPanel.removeAll();
-            fifthChangesPanel.removeAll();
             MainFrame.this.revalidate();
             MainFrame.this.repaint();
         }
@@ -146,9 +193,23 @@ public class MainFrame extends JFrame {
             secondChangesPanel.removeAll();
             thirdChangesPanel.removeAll();
             fourthChangesPanel.removeAll();
-            fifthChangesPanel.removeAll();
             MainFrame.this.revalidate();
             MainFrame.this.repaint();
+        }
+    }
+
+    private class CreateGraphBtnActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                graphPanelPainter.paint(
+                        dotToSvg(GraphUtils.toDot(new CityGraph(stopsList, roadsList, routesList, transportsList)))
+                );
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(
+                        null, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE
+                );
+            }
         }
     }
 }

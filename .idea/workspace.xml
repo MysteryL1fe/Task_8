@@ -1,20 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="11c7e455-70c7-4eba-9534-4aa389b66144" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="11c7e455-70c7-4eba-9534-4aa389b66144" name="Changes" comment="partly added UI for routes">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/apache_xmlgraphics_batik_bridge.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/guru_nidi_graphviz_java.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/MultipleUseOfOneStopException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/RoadWithoutStopException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/RouteWithoutStopException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/AdjMatrixGraph.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/Graph.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/GraphUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/WeightedGraph.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/logic/CityGraph.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Task_8.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Task_8.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/MainFrame.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/MainFrame.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/MainFrame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/RoadsPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/RoadsPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/RoutesPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/RoutesPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/StopsPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/StopsPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/logic/Route.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/logic/Route.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/TransportsPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/TransportsPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/logic/Transport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/logic/Transport.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -28,12 +45,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "C:/Users/Asus/IdeaProjects/Новая папка/GraphSamples",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="khanin.dmitrii.graph.Main" />
@@ -52,6 +78,14 @@
       <option name="presentableId" value="Default" />
       <updated>1687761953534</updated>
     </task>
+    <task id="LOCAL-00001" summary="partly added UI for routes">
+      <created>1687884498267</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1687884498267</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -64,5 +98,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="partly added UI for routes" />
+    <option name="LAST_COMMIT_MESSAGE" value="partly added UI for routes" />
   </component>
 </project>

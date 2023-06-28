@@ -2,9 +2,10 @@ package khanin.dmitrii.graph.logic;
 
 public class Transport {
     private Route route;
-    private int startTime, speed, cost, num;
+    private int startTime, speed, cost;
+    private String num;
 
-    public Transport(Route route, int startTime, int speed, int cost, int num) {
+    public Transport(Route route, int startTime, int speed, int cost, String num) {
         this.route = route;
         this.startTime = startTime;
         this.speed = speed;
@@ -44,11 +45,11 @@ public class Transport {
         this.cost = cost;
     }
 
-    public int getNum() {
+    public String getNum() {
         return num;
     }
 
-    public void setNum(int num) {
+    public void setNum(String num) {
         this.num = num;
     }
 }
