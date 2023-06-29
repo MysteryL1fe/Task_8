@@ -54,6 +54,7 @@ public class TransportsPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mainFrame.changeSecondPanel(new ChangeTransportPanel(transport));
+                mainFrame.paintRoute(transport.getRoute());
             }
         }
     }
@@ -137,6 +138,7 @@ public class TransportsPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mainFrame.changeThirdPanel(new ChooseRoutePanel());
+                mainFrame.paintRoute(route);
             }
         }
 
@@ -165,6 +167,7 @@ public class TransportsPanel extends JPanel {
                     route = chooseRoute;
                     updateRoute();
                     mainFrame.changeThirdPanel(null);
+                    mainFrame.paintRoute(route);
                 }
             }
         }

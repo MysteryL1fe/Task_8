@@ -59,6 +59,7 @@ public class RoutesPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mainFrame.changeSecondPanel(new ChangeRoutePanel(route));
+                mainFrame.paintRoute(route);
             }
         }
     }
@@ -317,7 +318,7 @@ public class RoutesPanel extends JPanel {
                     private class DelayTimeOkBtnActionListener implements ActionListener {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            delayTimes.set(index, (Integer) delayTimeSpinner.getValue());
+                            delayTimes.set(index, Math.max(0, (Integer) delayTimeSpinner.getValue()));
                             updateDelayTimes();
                             mainFrame.changeFourthPanel(null);
                         }

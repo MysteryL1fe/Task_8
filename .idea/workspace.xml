@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="11c7e455-70c7-4eba-9534-4aa389b66144" name="Changes" comment="partly added constructor for CityGraph">
-      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/StopIsNotExist.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/StopIsNotSpecified.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/transport/WrongTransportRouteException.java" afterDir="false" />
+    <list default="true" id="11c7e455-70c7-4eba-9534-4aa389b66144" name="Changes" comment="added finding shortest path">
+      <change afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/exceptions/route/NegativeRouteDelayTimeException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/MainFrame.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/MainFrame.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/MainFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/RoadsPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/RoadsPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/RoutesPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/RoutesPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/TransportsPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/UI/TransportsPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/GraphUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/GraphUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/WeightedGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/graphs/WeightedGraph.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/logic/CityGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/logic/CityGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/khanin/dmitrii/graph/logic/Path.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/khanin/dmitrii/graph/logic/Path.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +92,14 @@
       <option name="project" value="LOCAL" />
       <updated>1687969171771</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="added finding shortest path">
+      <created>1688028682426</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1688028682426</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -107,6 +117,14 @@
     <MESSAGE value="partly added UI for routes" />
     <MESSAGE value="UI completed" />
     <MESSAGE value="partly added constructor for CityGraph" />
-    <option name="LAST_COMMIT_MESSAGE" value="partly added constructor for CityGraph" />
+    <MESSAGE value="added finding shortest path" />
+    <option name="LAST_COMMIT_MESSAGE" value="added finding shortest path" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="transportsToStop" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

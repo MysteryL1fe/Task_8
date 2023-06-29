@@ -4,13 +4,6 @@ import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.parse.Parser;
-import khanin.dmitrii.graph.exceptions.road.RoadConnectSameStopsException;
-import khanin.dmitrii.graph.exceptions.road.RoadWithoutStopException;
-import khanin.dmitrii.graph.exceptions.road.WrongRoadLengthException;
-import khanin.dmitrii.graph.exceptions.route.*;
-import khanin.dmitrii.graph.exceptions.stop.EmptyStopNameException;
-import khanin.dmitrii.graph.exceptions.stop.MultipleUseOfOneStopException;
-import khanin.dmitrii.graph.exceptions.transport.*;
 import khanin.dmitrii.graph.graphs.GraphUtils;
 import khanin.dmitrii.graph.logic.*;
 import org.apache.batik.anim.dom.SAXSVGDocumentFactory;
@@ -24,8 +17,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.*;
 import java.util.ArrayList;
 
 public class MainFrame extends JFrame {
@@ -44,6 +36,7 @@ public class MainFrame extends JFrame {
     private JButton createGraphBtn;
     private JButton fromStopBtn;
     private JButton toStopBtn;
+    private JTextArea systemOutTextArea;
     private final ArrayList<Stop> stopsList = new ArrayList<>();
     private final ArrayList<Road> roadsList = new ArrayList<>();
     private final ArrayList<Route> routesList = new ArrayList<>();
@@ -76,6 +69,8 @@ public class MainFrame extends JFrame {
         cheapestPathBtn.addActionListener(new CheapestPathBtnActionListener());
         fromStopBtn.addActionListener(new FromStopBtnActionListener());
         toStopBtn.addActionListener(new ToStopBtnActionListener());
+
+        systemOutTextArea.setEditable(false);
     }
 
     public void changeSecondPanel(JPanel panel) {
@@ -114,9 +109,44 @@ public class MainFrame extends JFrame {
         repaint();
     }
 
+    private void paintGraph(String dot) {
+        try {
+            graphPanelPainter.paint(dotToSvg(dot));
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(
+                    null, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    public void paintRoute(Route route) {
+        try {
+            paintGraph(GraphUtils.toDot(new CityGraph(stopsList, roadsList, routesList, transportsList), route));
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(
+                    null, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
     private static String dotToSvg(String dotSrc) throws IOException {
         MutableGraph g = new Parser().read(dotSrc);
         return Graphviz.fromGraph(g).render(Format.SVG).toString();
+    }
+
+    private void showSystemOut(Runnable action) {
+        PrintStream oldOut = System.out;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            System.setOut(new PrintStream(baos, true, "UTF-8"));
+
+            action.run();
+
+            systemOutTextArea.setText(baos.toString("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), null, JOptionPane.ERROR_MESSAGE);
+        }
+        System.setOut(oldOut);
     }
 
     public ArrayList<Stop> getStopsList() {
@@ -274,9 +304,7 @@ public class MainFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                graphPanelPainter.paint(
-                        dotToSvg(GraphUtils.toDot(new CityGraph(stopsList, roadsList, routesList, transportsList)))
-                );
+                paintGraph(GraphUtils.toDot(new CityGraph(stopsList, roadsList, routesList, transportsList)));
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(
                         null, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE
@@ -290,7 +318,23 @@ public class MainFrame extends JFrame {
         public void actionPerformed(ActionEvent e) {
             try {
                 CityGraph cityGraph = new CityGraph(stopsList, roadsList, routesList, transportsList);
-                cityGraph.findShortestPath(fromStop, toStop);
+                ArrayList<Path> result = cityGraph.findShortestPath(fromStop, toStop);
+                paintGraph(GraphUtils.toDot(cityGraph, result));
+                showSystemOut(() -> {
+                    int sumCost = 0;
+                    int sumTime = result.get(0).getStartTime() + result.get(result.size() - 1).getEndTime();
+                    int endTime = result.get(result.size() - 1).getEndTime();
+                    for (Path path : result) {
+                        sumCost += path.getCost();
+                    }
+                    System.out.println(String.format(
+                            "Суммарная стоимость поездки %s, суммарное время %s, время прибытия %s",
+                            sumCost, sumTime, endTime
+                    ));
+                    for (Path path : result) {
+                        System.out.println(path);
+                    }
+                });
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(
                         null, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE
@@ -304,7 +348,23 @@ public class MainFrame extends JFrame {
         public void actionPerformed(ActionEvent e) {
             try {
                 CityGraph cityGraph = new CityGraph(stopsList, roadsList, routesList, transportsList);
-                cityGraph.findCheapestPath(fromStop, toStop);
+                ArrayList<Path> result = cityGraph.findCheapestPath(fromStop, toStop);
+                paintGraph(GraphUtils.toDot(cityGraph, result));
+                showSystemOut(() -> {
+                    int sumCost = 0;
+                    int sumTime = result.get(0).getStartTime() + result.get(result.size() - 1).getEndTime();
+                    int endTime = result.get(result.size() - 1).getEndTime();
+                    for (Path path : result) {
+                        sumCost += path.getCost();
+                    }
+                    System.out.println(String.format(
+                            "Суммарная стоимость поездки %s, суммарное время %s, время прибытия %s",
+                            sumCost, sumTime, endTime
+                    ));
+                    for (Path path : result) {
+                        System.out.println(path);
+                    }
+                });
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(
                         null, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE

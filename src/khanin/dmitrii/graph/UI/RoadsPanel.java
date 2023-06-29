@@ -43,8 +43,8 @@ public class RoadsPanel extends JPanel {
             this.road = road;
 
             this.setText(String.format(
-                    "%s - %s", road.getFirstStop() == null ? "" : road.getFirstStop().getName(),
-                    road.getSecondStop() == null ? "" : road.getSecondStop().getName()
+                    "%s - %s : %s", road.getFirstStop() == null ? "" : road.getFirstStop().getName(),
+                    road.getSecondStop() == null ? "" : road.getSecondStop().getName(), road.getLength()
             ));
             this.addActionListener(new RoadBtnActionListener());
         }

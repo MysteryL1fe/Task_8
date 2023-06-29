@@ -96,4 +96,8 @@ public class WeightedGraph implements Graph {
     public boolean isAdj(int v1, int v2) {
         return weightMatrix[v1][v2] != 0;
     }
+
+    public int getWeight(int v1, int v2) {
+        return weightMatrix[v1][v2];
+    }
 }

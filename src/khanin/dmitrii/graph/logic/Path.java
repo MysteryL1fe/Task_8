@@ -4,15 +4,16 @@ public class Path {
     private Route route;
     private Transport transport;
     private Stop from, to;
-    private int startTime, endTime;
+    private int startTime, endTime, cost;
 
-    public Path(Route route, Transport transport, Stop from, Stop to, int startTime, int endTime) {
+    public Path(Route route, Transport transport, Stop from, Stop to, int startTime, int endTime, int cost) {
         this.route = route;
         this.transport = transport;
         this.from = from;
         this.to = to;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.cost = cost;
     }
 
     public Route getRoute() {
@@ -61,5 +62,21 @@ public class Path {
 
     public void setEndTime(int endTime) {
         this.endTime = endTime;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Маршрут №%s, транспорт №%s, от %s до %s, время посадки %s, время приезда %s, стоимость %s",
+                route.getNum(), transport.getNum(), from.getName(), to.getName(), startTime, endTime, cost
+        );
     }
 }
