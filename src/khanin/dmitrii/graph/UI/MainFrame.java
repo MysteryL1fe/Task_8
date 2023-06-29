@@ -4,6 +4,13 @@ import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.parse.Parser;
+import khanin.dmitrii.graph.exceptions.road.RoadConnectSameStopsException;
+import khanin.dmitrii.graph.exceptions.road.RoadWithoutStopException;
+import khanin.dmitrii.graph.exceptions.road.WrongRoadLengthException;
+import khanin.dmitrii.graph.exceptions.route.*;
+import khanin.dmitrii.graph.exceptions.stop.EmptyStopNameException;
+import khanin.dmitrii.graph.exceptions.stop.MultipleUseOfOneStopException;
+import khanin.dmitrii.graph.exceptions.transport.*;
 import khanin.dmitrii.graph.graphs.GraphUtils;
 import khanin.dmitrii.graph.logic.*;
 import org.apache.batik.anim.dom.SAXSVGDocumentFactory;
@@ -35,10 +42,14 @@ public class MainFrame extends JFrame {
     private JPanel thirdChangesPanel;
     private JPanel fourthChangesPanel;
     private JButton createGraphBtn;
+    private JButton fromStopBtn;
+    private JButton toStopBtn;
     private final ArrayList<Stop> stopsList = new ArrayList<>();
     private final ArrayList<Road> roadsList = new ArrayList<>();
     private final ArrayList<Route> routesList = new ArrayList<>();
     private final ArrayList<Transport> transportsList = new ArrayList<>();
+    private Stop fromStop = null;
+    private Stop toStop = null;
     private final SvgPanel graphPanelPainter;
 
     public MainFrame() {
@@ -61,6 +72,10 @@ public class MainFrame extends JFrame {
         routesBtn.addActionListener(new RoutesBtnActionListener());
         transportsBtn.addActionListener(new TransportsBtnActionListener());
         createGraphBtn.addActionListener(new CreateGraphBtnActionListener());
+        shortestPathBtn.addActionListener(new ShortestPathBtnActionListener());
+        cheapestPathBtn.addActionListener(new CheapestPathBtnActionListener());
+        fromStopBtn.addActionListener(new FromStopBtnActionListener());
+        toStopBtn.addActionListener(new ToStopBtnActionListener());
     }
 
     public void changeSecondPanel(JPanel panel) {
@@ -83,6 +98,18 @@ public class MainFrame extends JFrame {
     public void changeFourthPanel(JPanel panel) {
         fourthChangesPanel.removeAll();
         if (panel != null) fourthChangesPanel.add(panel);
+        revalidate();
+        repaint();
+    }
+
+    private void updateFromStopBtn() {
+        fromStopBtn.setText(fromStop == null ? "" : fromStop.getName());
+        revalidate();
+        repaint();
+    }
+
+    private void updateToStopBtn() {
+        toStopBtn.setText(toStop == null ? "" : toStop.getName());
         revalidate();
         repaint();
     }
@@ -143,6 +170,51 @@ public class MainFrame extends JFrame {
             Graphics2D g2d = (Graphics2D) gr;
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             svgGraphicsNode.paint(g2d);
+        }
+    }
+
+    private class ChooseStopPanel extends JPanel {
+        private final boolean isFromStop;
+
+        public ChooseStopPanel(boolean isFromStop) {
+            this.isFromStop = isFromStop;
+
+            this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+            for (Stop stop : stopsList) {
+                this.add(new StopBtn(stop));
+            }
+        }
+
+        private class StopBtn extends JButton {
+            private final Stop stop;
+
+            public StopBtn(Stop stop) {
+                this.stop = stop;
+
+                this.setText(stop.getName());
+                this.addActionListener(new StopBtnActionListener());
+            }
+
+            private class StopBtnActionListener implements ActionListener {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (isFromStop) {
+                        fromStop = stop;
+                        updateFromStopBtn();
+                    }
+                    else {
+                        toStop = stop;
+                        updateToStopBtn();
+                    }
+                    firstChangesPanel.removeAll();
+                    secondChangesPanel.removeAll();
+                    thirdChangesPanel.removeAll();
+                    fourthChangesPanel.removeAll();
+                    MainFrame.this.revalidate();
+                    MainFrame.this.repaint();
+                }
+            }
         }
     }
 
@@ -210,6 +282,60 @@ public class MainFrame extends JFrame {
                         null, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE
                 );
             }
+        }
+    }
+
+    private class ShortestPathBtnActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                CityGraph cityGraph = new CityGraph(stopsList, roadsList, routesList, transportsList);
+                cityGraph.findShortestPath(fromStop, toStop);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(
+                        null, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+    }
+
+    private class CheapestPathBtnActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                CityGraph cityGraph = new CityGraph(stopsList, roadsList, routesList, transportsList);
+                cityGraph.findCheapestPath(fromStop, toStop);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(
+                        null, ex.getMessage(), null, JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+    }
+
+    private class FromStopBtnActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            firstChangesPanel.removeAll();
+            firstChangesPanel.add(new ChooseStopPanel(true));
+            secondChangesPanel.removeAll();
+            thirdChangesPanel.removeAll();
+            fourthChangesPanel.removeAll();
+            MainFrame.this.revalidate();
+            MainFrame.this.repaint();
+        }
+    }
+
+    private class ToStopBtnActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            firstChangesPanel.removeAll();
+            firstChangesPanel.add(new ChooseStopPanel(false));
+            secondChangesPanel.removeAll();
+            thirdChangesPanel.removeAll();
+            fourthChangesPanel.removeAll();
+            MainFrame.this.revalidate();
+            MainFrame.this.repaint();
         }
     }
 }

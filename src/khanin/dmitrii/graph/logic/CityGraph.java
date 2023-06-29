@@ -1,5 +1,7 @@
 package khanin.dmitrii.graph.logic;
 
+import khanin.dmitrii.graph.exceptions.StopIsNotExist;
+import khanin.dmitrii.graph.exceptions.StopIsNotSpecified;
 import khanin.dmitrii.graph.exceptions.road.*;
 import khanin.dmitrii.graph.exceptions.route.*;
 import khanin.dmitrii.graph.exceptions.stop.*;
@@ -15,6 +17,7 @@ public class CityGraph extends WeightedGraph {
     private final Map<Integer, Route> indexToRoute = new HashMap<>();
     private final ArrayList<ArrayList<Stop>> routesStops = new ArrayList<>();
     private final ArrayList<ArrayList<Integer>> routesDelayTimes = new ArrayList<>();
+    private final HashMap<Stop, ArrayList<ExtendedTransport>> transportsToStop = new HashMap<>();
 
     public CityGraph(ArrayList<Stop> stops, ArrayList<Road> roads,
                      ArrayList<Route> routes, ArrayList<Transport> transports)
@@ -22,7 +25,8 @@ public class CityGraph extends WeightedGraph {
             WrongRoadLengthException, EmptyStopNameException, EmptyRouteDelayTimesException,
             DifferentRouteStopsAndDelayTimesCountsException, RoadConnectSameStopsException, EmptyRouteNumException,
             NegativeTransportStartTimeException, NegativeTransportCostException, EmptyTransportNumException,
-            EmptyTransportRouteException, NegativeTransportSpeedException, RouteWithRoadBreakException {
+            EmptyTransportRouteException, NegativeTransportSpeedException, RouteWithRoadBreakException,
+            WrongTransportRouteException {
 
         super(stops.size());
 
@@ -148,10 +152,225 @@ public class CityGraph extends WeightedGraph {
             if (transport.getSpeed() < 1) {
                 throw new NegativeTransportSpeedException("Найден транспорт с нулевой или отрицательной скоростью");
             }
+            if (!routeToIndex.containsKey(transport.getRoute())) {
+                throw new WrongTransportRouteException("Найден транспорт с неизвестным маршрутом");
+            }
+            new ExtendedTransport(transport, routeToIndex.get(transport.getRoute()));
         }
     }
 
     public String getStopNameByIndex(int index) {
         return indexToStop.get(index).getName();
+    }
+
+    public ArrayList<Path> findShortestPath(Stop from, Stop to) throws StopIsNotSpecified, StopIsNotExist {
+        if (from == null || to == null) throw new StopIsNotSpecified("Не указано от/до какой остановки");
+        if (!stopToIndex.containsKey(from) || !stopToIndex.containsKey(to)) {
+            throw new StopIsNotExist("Указанной остановки не найдено");
+        }
+
+        ArrayList<Path> result = new ArrayList<>();
+
+        int n = stopToIndex.size();
+        int fromIndex = stopToIndex.get(from);
+        int toIndex = stopToIndex.get(to);
+        int[] d = new int[n];
+        int[] fromStop = new int[n];
+        boolean[] found = new boolean[n];
+
+        Arrays.fill(d, Integer.MAX_VALUE);
+        d[fromIndex] = 0;
+        Arrays.fill(fromStop, -1);
+
+        for (int i = 0; i < n; i++) {
+            int cur = -1;
+            for (int j = 0; j < n; j++) {
+                if (!found[j] && (cur < 0 || d[j] < d[cur])) {
+                    cur = j;
+                }
+            }
+
+            found[cur] = true;
+            if (cur == toIndex) {
+                break;
+            }
+            ArrayList<ExtendedTransport> transportsCur = transportsToStop.get(indexToStop.get(cur));
+            for (int next = 0; next < n; next++) {
+                ArrayList<ExtendedTransport> transports = new ArrayList<>();
+                for (ExtendedTransport transport : transportsToStop.get(indexToStop.get(next))) {
+                    if (transportsCur.contains(transport)) {
+                        transports.add(transport);
+                    }
+                }
+                ArrayList<ExtendedTransport> suitableTransports = new ArrayList<>();
+                for (ExtendedTransport transport : transports) {
+                    Iterator<Stop> it1 = routesStops.get(routeToIndex.get(transport.transport.getRoute())).iterator();
+                    Iterator<Stop> it2 = routesStops.get(routeToIndex.get(transport.transport.getRoute())).iterator();
+                    it2.next();
+                    while (it2.hasNext()) {
+                        Stop stop1 = it1.next();
+                        Stop stop2 = it2.next();
+                        if (stopToIndex.get(stop1) == cur && stopToIndex.get(stop2) == next) {
+                            suitableTransports.add(transport);
+                            break;
+                        }
+                    }
+                }
+                if (suitableTransports.size() > 0) {
+                    if (weightMatrix[cur][next] != 0 && d[cur] + weightMatrix[cur][next] < d[next]) {
+                        d[next] = d[cur] + weightMatrix[cur][next];
+                        fromStop[next] = cur;
+                    }
+                }
+            }
+        }
+
+        int pathFrom = fromStop[toIndex], pathTo = toIndex;
+        ArrayList<Integer> path = new ArrayList<>();
+        path.add(pathTo);
+        while (pathFrom >= 0 && d[pathTo] < Integer.MAX_VALUE) {
+            path.add(pathFrom);
+            pathTo = pathFrom;
+            pathFrom = fromStop[pathFrom];
+        }
+
+        Collections.reverse(path);
+        if (path.get(0) != fromIndex) return result;
+
+        int time = 0;
+        Iterator<Integer> pathIt1 = path.iterator();
+        Iterator<Integer> pathIt2 = path.iterator();
+        pathIt2.next();
+        while (pathIt2.hasNext()) {
+            int cur = pathIt1.next(), next = pathIt2.next();
+            ArrayList<ExtendedTransport> transportsCur = transportsToStop.get(indexToStop.get(cur));
+            ArrayList<ExtendedTransport> transports = new ArrayList<>();
+            for (ExtendedTransport transport : transportsToStop.get(indexToStop.get(next))) {
+                if (transportsCur.contains(transport)) {
+                    transports.add(transport);
+                }
+            }
+            int minStartTime = 0;
+            int minEndTime = Integer.MAX_VALUE;
+            Transport minTransport = null;
+            for (ExtendedTransport transport : transports) {
+                int i = 0;
+                Iterator<Stop> it1 = routesStops.get(routeToIndex.get(transport.transport.getRoute())).iterator();
+                Iterator<Stop> it2 = routesStops.get(routeToIndex.get(transport.transport.getRoute())).iterator();
+                it2.next();
+                while (it2.hasNext()) {
+                    Stop stop1 = it1.next();
+                    Stop stop2 = it2.next();
+                    if (stopToIndex.get(stop1) == cur && stopToIndex.get(stop2) == next) {
+                        int j = 0;
+                        while (transport.timeFromStartToStop.get(i) + transport.delayTimesOnStop.get(i)
+                                + j * transport.routeTime < time) {
+                            j++;
+                        }
+                        int curStartTime = Math.max(
+                                time, transport.timeFromStartToStop.get(i) + j * transport.routeTime
+                        );
+                        int curEndTime = transport.timeFromStartToStop.get(i) + transport.delayTimesOnStop.get(i)
+                                + j * transport.routeTime;
+                        if (curEndTime < minEndTime) {
+                            minStartTime = curStartTime;
+                            minEndTime = curEndTime;
+                            minTransport = transport.transport;
+                        }
+                    }
+                    i++;
+                }
+            }
+            result.add(new Path(
+                    minTransport.getRoute(), minTransport, indexToStop.get(cur), indexToStop.get(next),
+                    minStartTime, minEndTime
+            ));
+            time = minEndTime;
+        }
+
+        return result;
+    }
+
+    public ArrayList<Path> findCheapestPath(Stop from, Stop to) throws StopIsNotSpecified, StopIsNotExist {
+        if (from == null || to == null) throw new StopIsNotSpecified("Не указано от/до какой остановки");
+        if (!stopToIndex.containsKey(from) || !stopToIndex.containsKey(to)) {
+            throw new StopIsNotExist("Указанной остановки не найдено");
+        }
+
+        int n = stopToIndex.size();
+        int fromIndex = stopToIndex.get(from);
+        int toIndex = stopToIndex.get(to);
+        int[] d = new int[n];
+        int[] fromStop = new int[n];
+        boolean[] found = new boolean[n];
+
+        Arrays.fill(d, Integer.MAX_VALUE);
+        d[fromIndex] = 0;
+
+        for (int i = 0; i < n; i++) {
+            int cur = -1;
+            for (int j = 0; j < n; j++) {
+                if (!found[j] && (cur < 0 || d[j] < d[cur])) {
+                    cur = j;
+                }
+            }
+
+            found[cur] = true;
+            if (cur == toIndex) {
+                break;
+            }
+            for (int next = 0; next < n; next++) {
+                if (weightMatrix[cur][next] != 0 && d[cur] + weightMatrix[cur][next] < d[next]) {
+                    d[next] = d[cur] + weightMatrix[cur][next];
+                    fromStop[next] = cur;
+                }
+            }
+        }
+
+        return new ArrayList<>();
+    }
+
+    private class ExtendedTransport {
+        private final Transport transport;
+        private final int routeIndex;
+        private int routeTime = 0;
+        private final ArrayList<Integer> timeFromStartToStop = new ArrayList<>();
+        private final ArrayList<Integer> delayTimesOnStop = new ArrayList<>();
+
+        public ExtendedTransport(Transport transport, int routeIndex) {
+            this.transport = transport;
+            this.routeIndex = routeIndex;
+
+            Iterator<Stop> stopsIt = routesStops.get(routeIndex).iterator();
+            Iterator<Integer> delayTimesIt = routesDelayTimes.get(routeIndex).iterator();
+            Set<Stop> visitedStops = new HashSet<>();
+
+            Stop lastStop = null;
+            while (stopsIt.hasNext() && delayTimesIt.hasNext()) {
+                Stop stop = stopsIt.next();
+                Integer delayTime = delayTimesIt.next();
+
+                timeFromStartToStop.add(routeTime);
+                delayTimesOnStop.add(delayTime);
+
+                if (lastStop != null) {
+                    routeTime += (weightMatrix[stopToIndex.get(lastStop)][stopToIndex.get(stop)]
+                            + transport.getSpeed() - 1) / transport.getSpeed();
+                }
+                routeTime += delayTime;
+
+                if (visitedStops.add(stop)) {
+                    if (transportsToStop.containsKey(stop)) {
+                        transportsToStop.get(stop).add(this);
+                    } else {
+                        ArrayList<ExtendedTransport> tmp = new ArrayList<>();
+                        tmp.add(this);
+                        transportsToStop.put(stop, tmp);
+                    }
+                }
+
+                lastStop = stop;
+            }
+        }
     }
 }

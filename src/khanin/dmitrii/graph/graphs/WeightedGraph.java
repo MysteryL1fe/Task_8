@@ -44,6 +44,7 @@ public class WeightedGraph implements Graph {
             eCnt++;
         }
         weightMatrix[v1][v2] = weight;
+        weightMatrix[v2][v1] = weight;
     }
 
     @Override
