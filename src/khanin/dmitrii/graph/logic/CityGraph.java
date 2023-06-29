@@ -13,8 +13,6 @@ import java.util.*;
 public class CityGraph extends WeightedGraph {
     private final Map<Stop, Integer> stopToIndex = new HashMap<>();
     private final Map<Integer, Stop> indexToStop = new HashMap<>();
-    private final Map<Route, Integer> routeToIndex = new HashMap<>();
-    private final Map<Integer, Route> indexToRoute = new HashMap<>();
     private final ArrayList<ArrayList<Stop>> routesStops = new ArrayList<>();
     private final ArrayList<ArrayList<Integer>> routesDelayTimes = new ArrayList<>();
     private final HashMap<Stop, ArrayList<ExtendedTransport>> transportsToStop = new HashMap<>();
@@ -59,6 +57,7 @@ public class CityGraph extends WeightedGraph {
             }
         }
 
+        Map<Route, Integer> routeToIndex = new HashMap<>();
         for (Route route : routes) {
             if (route.getRoadsList().size() == 0) {
                 throw new RouteWithoutStopException("Найден маршрут без остановок");
@@ -133,7 +132,6 @@ public class CityGraph extends WeightedGraph {
                 fullRouteTimeDelays.addAll(tmp2);
             }
             routeToIndex.put(route, routesStops.size());
-            indexToRoute.put(routesStops.size(), route);
             routesStops.add(fullRouteStops);
             routesDelayTimes.add(fullRouteTimeDelays);
         }
